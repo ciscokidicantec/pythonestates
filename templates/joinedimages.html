@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+ <!-- Next and previous buttons -->
+ <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+ <a class="next" onclick="plusSlides(1)">&#10095;</a>
+ 
+<h1 style="color: rgb(0, 255, 200)">Associate Joined Arrays Navigating Carusel</h1>
+
+Here Is the front page menu <br />
+
+<input type="button" onclick='addimg();' id="pictfunc" value="Click Me To Enter addimg"/>
+
+
+<div id ="jstr" >
+    {{stud_json}}
+</div>
+
+<div id="convertedtojson">
+</div>
+
+<div id="newbutton">
+</div>
+
+<div id="anothernewbutton">
+</div>
+
+<span id="spanbutton">
+</span>
+    
+<script type="text/javascript" >
+
+function getal(id,p1,p2,idnosk,objjson){
+
+    if (id == "pictfunc") return;
+
+    console.log("object objjson = " ,objjson[idnosk+1].imagepath);
+
+
+    console.log("event fired from button id = " + id," p1 * p2 = " + p1*p2 + "idnosk = " + idnosk);
+    //document.getElementById("imgcar" + idnosk).src = '/static/uploadimages/IMG_20190429_182340_7.jpg';
+    document.getElementById("imgcar" + idnosk).src = objjson[idnosk].imagepath;
+
+    return 4567;
+}
+
+function getright(id,p1,p2,idnosk){
+    console.log("THe id for th event is = ",id)
+    document.getElementById("imgcar" + idnosk).src = '/static/uploadimages/helen.jpg';
+//    alert("Get Right Clicked Worked");
+    return 9876;
+}
+
+function addimg(){
+    
+    var sqq = document.getElementById("jstr").innerHTML;
+    const objjson = JSON.parse(sqq);
+
+    console.log("access JSON GIVES ME = ",objjson[0].id);
+    console.log("access JSON GIVES ME = ",objjson[0].name);
+    console.log("access JSON GIVES ME = ",objjson[0].price);
+    console.log("access JSON GIVES ME = ",objjson[0].address);
+    console.log("access JSON GIVES ME = ",objjson[0].imagepath);
+    console.log("access JSON GIVES ME = ",objjson[0].estatedes);
+    console.log("access JSON GIVES ME = ",objjson[0].fulldes);
+    console.log("access JSON GIVES ME = ",objjson[0].lastupdated);
+    console.log("access JSON GIVES ME = ",objjson[0].lcount);
+
+    console.log("access JSON GIVES ME = ",objjson[1].id);
+    console.log("access JSON GIVES ME = ",objjson[1].name);
+    console.log("access JSON GIVES ME = ",objjson[1].price);
+    console.log("access JSON GIVES ME = ",objjson[1].address);
+    console.log("access JSON GIVES ME = ",objjson[1].imagepath);
+    console.log("access JSON GIVES ME = ",objjson[1].estatedes);
+    console.log("access JSON GIVES ME = ",objjson[1].fulldes);
+    console.log("access JSON GIVES ME = ",objjson[1].lastupdated);
+    console.log("access JSON GIVES ME = ",objjson[1].lcount);
+
+
+
+    console.log("access JSON GIVES ME = ",objjson[3].id);
+    console.log("access JSON GIVES ME = ",objjson[3].name);
+    console.log("access JSON GIVES ME = ",objjson[3].price);
+    console.log("access JSON GIVES ME = ",objjson[3].address);
+    console.log("access JSON GIVES ME = ",objjson[3].imagepath);
+    console.log("access JSON GIVES ME = ",objjson[3].estatedes);
+    console.log("access JSON GIVES ME = ",objjson[3].fulldes);
+    console.log("access JSON GIVES ME = ",objjson[3].lastupdated);
+    console.log("access JSON GIVES ME = ",objjson[3].lcount);
+   
+
+    var sqqtojson = document.getElementById("convertedtojson");
+    convertedtojson.innerHTML = sqqtojson;
+
+    //note each key represents the estate id
+    const mykyee = Object.keys(objjson);
+
+    //Keep track of currently displaying image for each estate
+    imagetracker = [];
+    for (let h=0;h<mykyee.length;h++){
+        imagetracker[h] = 0;
+    }
+
+    //Create a dictionery to map images for each estate property, allowing image control to update 
+    //when click forwards or reverse
+
+    thisdict = {
+        "brand": "Ford",
+        "model": "Mustang",
+        "year": 1964
+    }
+
+    starterseed = -1;
+
+    for (let k=0;k<mykyee.length;k++){
+
+        if (starterseed == objjson[mykyee[k]].id){
+            continue;
+        }  //maybe its break
+
+        starterseed = objjson[mykyee[k]].id;
+
+        autobutton = document.createElement("input");
+        autobutton.setAttribute("type", "button");
+        autobutton.setAttribute("id", "mybuttonid" + k);
+        autobutton.setAttribute("value", "Left");
+        autobutton.style.background="yellow";
+
+        autorightbutton = document.createElement("input");
+        autorightbutton.setAttribute("type", "button");
+        autorightbutton.setAttribute("id", "mybuttonrightid" + k);
+        autorightbutton.setAttribute("value", "Right");
+        autorightbutton.style.background="red";
+
+        newlinelabel = document.createElement('label');
+        newlinelabel.innerHTML = "<br />";
+
+		pictx = document.createElement("img");
+        pictx.setAttribute("id", "imgcar" + k);
+		pictx.setAttribute("src", objjson[mykyee[k]].imagepath);
+        pictx.setAttribute("height", "500");
+        pictx.setAttribute("alt", "Checking Javascript");
+
+		document.getElementById("spanbutton").appendChild(pictx);
+        document.getElementById("spanbutton").appendChild(newlinelabel);
+        document.getElementById("spanbutton").appendChild(autobutton);
+        document.getElementById("spanbutton").appendChild(autorightbutton);
+
+     //   console.log("current date and time format = " + objjson[mykyee[k]].lastupdated);
+        
+
+        labelprice = document.createElement('label');
+        labelprice.innerHTML = "<br />" + "£" + objjson[mykyee[k]].price +
+                            "<br />" + objjson[mykyee[k]].imagepath +
+                            "<br />" + objjson[mykyee[k]].address +
+                            "<br />" + objjson[mykyee[k]].estatedes +
+                            "<br />" + objjson[mykyee[k]].fulldes +
+                            "<br />" + objjson[mykyee[k]].id +
+                            "<br />" + objjson[mykyee[k]].onmarketdate +
+                            "<br />" + objjson[mykyee[k]].lastupdated +                            
+                            "<br /><br />";
+        document.getElementById("spanbutton").appendChild(labelprice);
+
+     //   document.getElementById("anothernewbutton").appendChild(labelprice);
+
+
+
+        p1=45;
+        p2=6;
+        //imgid = imgcar + k;
+
+        document.getElementById("mybuttonid" + k).addEventListener('click', function(e){
+            var returnimgpos = getal(e.target.id,p1,p2,k,objjson);
+
+            console.log("This is the return result from the event being returned = ", returnimgpos);
+
+        });
+
+        document.getElementById("mybuttonrightid" + k).addEventListener('click', function(e){
+            var returnimgpos = getright(e.target.id,p1,p2,k);
+            
+            console.log("This is the return result from the event being returned = ", returnimgpos);
+
+        });
+
+
+    }
+    return;
+}
+    </script>
+
+{% endblock %}
