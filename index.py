@@ -160,7 +160,8 @@ Situated over a huge square footage, this home offers huge potential throughout,
 	                (17, 3,	"/static/uploadimages/IMG_20190429_181624_2.jpg"),
 	                (18, 15, "/static/uploadimages/helen.jpg"),
 	                (19, 8,	"/static/uploadimages/helen.jpg"),
-	                (20, 9,	"/static/uploadimages/helen.jpg")]
+	                (20, 9,	"/static/uploadimages/helen.jpg"),
+                    (21,15,"/static/uploadimages/helenlylo.jpg")]
 
         mycursorjoin.executemany(sqlimage, valimage)
         mydbtbjoin.commit()
