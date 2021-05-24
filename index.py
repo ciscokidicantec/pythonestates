@@ -51,20 +51,6 @@ import databaseexists
 app=Flask(__name__)
 nav = Nav(app)
 
-#app.config['SQLACHEMY_DATABASE_URI'] = 'mysql://root:Coreldraw1$@localhost/mymariodatabase'
-#app.config['SQLACHEMY_TRACK_MODIFICATIONS'] = False
-
-#logging.basicConfig(filename="c:\\compress\\errorlogger\\python.log", level=logging.DEBUG)
-#logger = logging.getLogger()
-
-
-#db = SQLAlchemy(app)
-
-#class customers(db.Model):
- # sqlachemyid = db.Column(db.Integer, primary_key=True)
-  #sqlachemyname = db.Column(db.String(80),unique=True)
-  #sqlachemyvendorname = db.Column(db.String(80),unique=True)
-#=======================================================================================================================
 @app.route('/',methods=['GET','POST'])
 def j():
 
