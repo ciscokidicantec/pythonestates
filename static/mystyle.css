@@ -1,0 +1,25 @@
+body    {
+
+    /* background-color: rgb(205, 50, 159); */
+    background-image: linear-gradient(to right, rgb(205, 50, 159) , steelblue);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
+}
+
+img:hover {
+
+    height: 700px;
+    border-radius: 50%;
+    opacity: 0.9;
+
+}
+
+ /*img:hover {
+    height: 300px;
+    border-radius: 50%;
+    opacity: 0.9;
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+*/
