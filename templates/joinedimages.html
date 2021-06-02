@@ -186,6 +186,13 @@ function addimg(){
             console.log("object items number of images = ", returnedMapele.nuberofimages);            
             console.log("object current img pointer = ", returnedMapele.currentimgpointer);                       
 
+            returnedMapele.currentimgpointer = returnedMapele.currentimgpointer + 12;
+            picturepointer.set(e.target.id,{"currentimgpointer":returnedMapele.currentimgpointer,"nuberofimages":3});
+            console.log("object current img pointer = ", returnedMapele.currentimgpointer);                       
+
+            
+            returnedMapele = picturepointer.get(e.target.id);
+
 
             //picturepointer.get(e.target.id);
             //picturepointer.size();
