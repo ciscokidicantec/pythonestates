@@ -175,11 +175,11 @@ Situated over a huge square footage, this home offers huge potential throughout,
         mydictcursor.execute(sql_select_Query)
         returndictrow = mydictcursor.fetchall()
 
-        print("whole dictionery 9th June 2021 = ",returndictrow)
+    #    print("whole dictionery 9th June 2021 = ",returndictrow)
 
 
-        for mydictrow in returndictrow:
-            print("dictionery 9th June 2021 row field = ",mydictrow["name"])
+    #    for mydictrow in returndictrow:
+    #        print("dictionery 9th June 2021 row field = ",mydictrow["name"])
 
         mydict = {}
     #    testdict = {}
@@ -238,7 +238,7 @@ Situated over a huge square footage, this home offers huge potential throughout,
 
    # r = json.dumps(jsontuplelist)
 
-    print(jsontuplelist)
+   # print(jsontuplelist)
 
     return render_template('joinedimages.html', stud_json=jsontuplelist)    
 
