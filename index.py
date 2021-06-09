@@ -228,7 +228,11 @@ Situated over a huge square footage, this home offers huge potential throughout,
 
     #jsontuplelist = json.dumps(rowreturn)
 
-    jsontuplelist = json.dumps(mydict, default = myconverter)
+    #jsontuplelist = json.dumps(mydict, default = myconverter)
+
+    jsontuplelist = json.dumps(returndictrow, default = myconverter)
+
+
 
     #jsontuplelist = json.dumps(mydict)
 
