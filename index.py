@@ -170,6 +170,17 @@ Situated over a huge square footage, this home offers huge potential throughout,
         mycursor.execute(sql_select_Query)
         rowreturn = mycursor.fetchall()
 
+        #try output for select as a dictionery
+        mydictcursor = mydbtbselectconn.cursor(dictionary=True)
+        mydictcursor.execute(sql_select_Query)
+        returndictrow = mydictcursor.fetchall()
+
+        print("whole dictionery 9th June 2021 = ",returndictrow)
+
+
+        for mydictrow in returndictrow:
+            print("dictionery 9th June 2021 row field = ",mydictrow["name"])
+
         mydict = {}
     #    testdict = {}
     #    d = {'1':'1','2':'3','3':'4'}
