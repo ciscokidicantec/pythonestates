@@ -12,6 +12,8 @@ import simplejson as json
 from flask import Flask,redirect,url_for,render_template,request, jsonify
 import mysql.connector.connection
 
+from flask_mail import Mail, Message
+
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.types import Integer
 #from sqlalchemy.types import NULLTYPE
