@@ -12,12 +12,11 @@ import simplejson as json
 from flask import Flask,redirect,url_for,render_template,request, jsonify
 import mysql.connector.connection
 
-from flask_mail import Mail, Message
+from flask_mail import Mail, Message    #pip install Flask-Mail
 
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.types import Integer
 #from sqlalchemy.types import NULLTYPE
-
 
 import os
 from werkzeug.utils import secure_filename
@@ -36,6 +35,17 @@ from tkinter.filedialog import askopenfilename
 from flask_nav import Nav
 #from flask_sqlalchemy import SQLAlchemy
 
+# Import smtplib for the actual sending function
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+
+# And imghdr to find the types of our images
+import imghdr
+
+# Here are the email package modules we'll need
+from email.message import EmailMessage
 
 
 from flask_wtf import FlaskForm
@@ -51,6 +61,67 @@ import databaseexists
 
 app=Flask(__name__)
 nav = Nav(app)
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'cisco.kidicantec@googlemail.com'
+app.config['MAIL_PASSWORD'] = 'Coreldraw1$'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+
+@app.route("/m")
+def mail():
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = 'This is the subject matter from python'
+        msg['From'] = 'cisco.kidicantec@googlemail.com'
+        msg['To'] = 'mario@wakeham.name'
+
+        to_emails = None 
+
+   #assert isinstance(to_emails,list)
+
+   # Send the message via our own SMTP server.
+   # Gmail SMTP port (TLS): 587.
+   # Gmail SMTP port (SSL): 465.
+
+        SERVER = 'smtp.gmail.com'
+        s = smtplib.SMTP(SERVER, 587)
+        #s = smtplib.SMTP(SERVER, 465)
+
+        #s = smtplib.SMTP('localhost')
+
+        mymsg = """From: From Person <cisco.kidicantec@googlemail.com>"""
+        #mymsg = "Here is my message string from sendmail 11th June 2021 11:45"
+        s.ehlo()
+        s.starttls()
+        s.login("cisco.kidicantec@googlemail.com","Coreldraw1$")
+        s.sendmail("cisco.kidicantec@googlemail.com","mario@wakeham.name",mymsg)
+        #s.sendmail("cisco.kidicantec@googlemail.com","mario@wakeham.name") 
+ 
+        #s.send_message(msg)
+        s.quit()
+
+    except smtplib.SMTPException as e:
+        print("problem with SMTPExceptionat my err = ",e)
+
+    #return "Has been sent with subject 11th June 2021 23:35"
+
+    mail = Mail(app)
+    msg = Message('Hello', sender = 'cisco.kidicantec@googlemail.com', recipients = ['mario@wakeham.name'])
+    msg.body = "Hello Flask message sent from Flask-Mail"
+    msg.subject = "Testing Subject Line Of Pure Mail next try cc and bcc"
+    #msg.cc = "mariowakeham@outlook.com"
+
+    #msg['Subject'] = "Sending Mail With Bcc and Cc"
+    #msg['To'] = "mariowakeham@outlook.com"
+    #msg['Cc'] = "cisco.kidicantec@googlemail.com"
+    #msg.attach(my_msg_body)
+
+    mail.send(msg)
+    return "Sent from pure mail.send"
+
 
 @app.route('/',methods=['GET','POST'])
 def j():
