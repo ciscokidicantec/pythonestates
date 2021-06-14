@@ -59,6 +59,11 @@ from flask import Flask,redirect,url_for,render_template,request
 from databaseexists import checkdatabaseexists,testfunc
 import databaseexists
 
+from sqlalchemy import create_engine, engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+
+
 app=Flask(__name__)
 nav = Nav(app)
 
@@ -68,6 +73,15 @@ app.config['MAIL_USERNAME'] = 'cisco.kidicantec@googlemail.com'
 app.config['MAIL_PASSWORD'] = 'Coreldraw1$'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+
+
+#engine = create_engine(os.getenv("DATABASE_URL"))
+
+#engine = create_engine("localhost")
+#engine = create_engine()
+
+
+#db = scoped_session(sessionmaker(bind=engine))
 
 
 @app.route("/m")
