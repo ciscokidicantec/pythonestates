@@ -15,8 +15,8 @@ import mysql.connector.connection
 from flask_mail import Mail, Message    #pip install Flask-Mail
 
 from flask_sqlalchemy import SQLAlchemy
-#from sqlalchemy.types import Integer
-#from sqlalchemy.types import NULLTYPE
+from sqlalchemy.types import Integer
+from sqlalchemy.types import NULLTYPE
 
 import os
 from werkzeug.utils import secure_filename
@@ -75,14 +75,24 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 
-#engine = create_engine(os.getenv("DATABASE_URL"))
 
-#engine = create_engine("localhost")
-#engine = create_engine()
+@app.route("/t")
+def myalch():
 
+    #osenvurl = os.getenv('DATABASE_URL')
+    #engine = create_engine(osenvurl)
 
-#db = scoped_session(sessionmaker(bind=engine))
+    engine = create_engine(os.getenv('DATABASE_URL'))
 
+    #engine = create_engine('mysql://root:Coreldraw1$@localhost/mymariodatabase')
+    db = scoped_session(sessionmaker(bind=engine))
+    allrows = db.execute("SELECT * FROM imagesjoin").fetchall()
+    print(allrows)
+
+    for myimpath in allrows:
+     print("/nimage path = ",myimpath.imagepath)
+
+    return "transactions complete"
 
 @app.route("/m")
 def mail():
