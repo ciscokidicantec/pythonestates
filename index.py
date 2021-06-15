@@ -70,7 +70,9 @@ class vendordb(db.Model):
     vendor_id = db.column(db.Integer,primary_key=True)
     vendor_active = db.column(db.String,nullable=False)
     vendor_type = db.column(db.String,nullable=False)
-    
+    vendor_company_name =db.column(db.String,nullable=False)
+    vendor_contact_name = db.column(db.String,nullable=False)
+
 
 
 
