@@ -62,7 +62,30 @@ import databaseexists
 from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
+class vendordb(db.Model):
+    __table__ = "vendors"
+    vendor_id = db.column(db.Integer,primary_key=True)
+    vendor_active = db.column(db.String,nullable=False)
+    vendor_type = db.column(db.String,nullable=False)
+    
+
+
+
+class vendors:
+    def __init__(self,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
+        self.vendor_active = vendor_active
+        self.vendor_type = vendor_type
+        self.vendor_company_name = vendor_company_name
+        self.vendor_contact_name = vendor_contact_name
+
+    def print_vendors(self):
+        print(f"\nIs Vendor active {self.vendor_active}")
+        print(f"\nVender Type Is {self.vendor_type}")
+        print(f"\nVendor_Company Name {self.vendor_company_name}")
+        print(f"\nVendor Contect Name {self.vendor_contact_name}")
 
 app=Flask(__name__)
 nav = Nav(app)
@@ -74,7 +97,14 @@ app.config['MAIL_PASSWORD'] = 'Coreldraw1$'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+@app.route("/orm")
+def create_vendors():
+    v1=vendors(vendor_active="y",vendor_type="e", vendor_company_name="Tiger Estates", vendor_contact_name="Sam Houston")
+    v1.print_vendors()
+    v2=vendors(vendor_active="n",vendor_type="p", vendor_company_name="", vendor_contact_name="Jade Menham")
+    v2.print_vendors()
 
+    return "orm complete"
 
 @app.route("/t")
 def myalch():
@@ -91,6 +121,9 @@ def myalch():
 
     for myimpath in allrows:
      print("/nimage path = ",myimpath.imagepath)
+
+    for myimpath in allrows:
+        print(f"{myimpath.imagepath}")
 
     return "transactions complete"
 
