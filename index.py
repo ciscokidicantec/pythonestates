@@ -63,18 +63,24 @@ from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from flask_sqlalchemy import SQLAlchemy
+#from models import *
 
 db = SQLAlchemy()
+
 class vendordb(db.Model):
-    __table__ = "vendors"
-    vendor_id = db.column(db.Integer,primary_key=True)
-    vendor_active = db.column(db.String,nullable=False)
-    vendor_type = db.column(db.String,nullable=False)
-    vendor_company_name =db.column(db.String,nullable=False)
-    vendor_contact_name = db.column(db.String,nullable=False)
+    __tablename__ = "vendors"
+    vendor_id = db.Column(db.Integer,primary_key=True)
+    vendor_active = db.Column(db.String(255),nullable=False)
+    vendor_type = db.Column(db.String(255),nullable=False)
+    vendor_company_name =db.Column(db.String(255),nullable=False)
+    vendor_contact_name = db.Column(db.String(255),nullable=False)
 
-
-
+    def __init__(self,vendor_id,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
+        self.vendor_id = vendor_id
+        self.vendor_active = vendor_active
+        self.vendor_type = vendor_type
+        self.vendor_company_name = vendor_company_name
+        self.vendor_contact_name = vendor_contact_name
 
 class vendors:
     def __init__(self,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
@@ -99,8 +105,20 @@ app.config['MAIL_PASSWORD'] = 'Coreldraw1$'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+
+#getdb = os.getenv("DATABASE_URL")
+#app.config["SQLALCHEMY_DATABASE_URI"] = getdb
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/mymariodatabase"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+
 @app.route("/orm")
 def create_vendors():
+
+   # db = SQLAlchemy()
+   # db.init_app(app)
+    db.create_all()
+
     v1=vendors(vendor_active="y",vendor_type="e", vendor_company_name="Tiger Estates", vendor_contact_name="Sam Houston")
     v1.print_vendors()
     v2=vendors(vendor_active="n",vendor_type="p", vendor_company_name="", vendor_contact_name="Jade Menham")
