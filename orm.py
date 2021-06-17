@@ -52,19 +52,6 @@ class Vendors(db.Model):
 @app.route("/")
 def create_vendors():
 
-   #engine = create_engine("mysql://root:Coreldraw1$@localhost/mymariodatabase")
-   #Vendors.drop(engine) # drops the users table
-   #sql = 'DROP TABLE IF EXISTS my_users;'
-   #result = engine.execute(sql)
-   #db.drop_all()
-
-
-   #engine = create_engine(os.getenv('DATABASE_URL'))
-   #Vendors.drop(engine)
-
-   #engine = create_engine('mysql://root:Coreldraw1$@localhost/mymariodatabase')
-   #db = scoped_session(sessionmaker(bind=engine))
-
    db.create_all()
    v1=Vendors(vendor_active="y",vendor_type="e", vendor_company_name="Tiger Estates", vendor_contact_name="Sam Houston")
    db.session.add(v1)
