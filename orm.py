@@ -8,6 +8,8 @@ from sqlalchemy.ext.declarative.api import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 
+from form import RegistrationForm, LoginForm
+
 #from sqlalchemy import Column,ForeignKey,Integer,String
 #from sqlalchemy.ext.declarative import declarative_base
 #from sqlalchemy.orm import relationship
@@ -18,6 +20,7 @@ app=Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/mymariodatabase"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SECRET_KEY"] = '0dc976215dbebf7ec65ed062fe111d12'
 
 db = SQLAlchemy(app)
 
@@ -29,6 +32,30 @@ class Vendors(db.Model):
     vendor_company_name =db.Column(db.String(255),nullable=False)
     vendor_contact_name = db.Column(db.String(255),nullable=False)
     vendor_onmarketdate = db.Column(db.DateTime,nullable=False,default=datetime.now) #utcnow
+    vendor_email = db.Column(db.String(255),nullable=False)
+    vendor_mobile = db.Column(db.String(25),nullable=False)
+    vendor_fax = db.Column(db.String(25),nullable=False)
+    vendor_address_house_name = db.Column(db.String(255),nullable=True)
+    vendor_address_house_number = db.Column(db.String(255),nullable=True)
+    vendor_address_line1 = db.Column(db.String(255),nullable=False)
+    vendor_address_line_2 = db.Column(db.String(255),nullable=False)
+    vendor_address_town = db.Column(db.String(255),nullable=False)
+    vendor_address_city = db.Column(db.String(255),nullable=False)
+    vendor_address_county = db.Column(db.String(255),nullable=False)
+    vendor_address_post_code = db.Column(db.String(255),nullable=False)
+    
+
+
+    
+    
+    
+    
+
+
+
+
+
+
 
 
 
@@ -51,6 +78,19 @@ class Vendors(db.Model):
       #  print(f"\nVender Type Is {self.vendor_type}")
        # print(f"\nVendor_Company Name {self.vendor_company_name}")
         #print(f"\nVendor Contect Name {self.vendor_contact_name}")
+
+
+@app.route("/register")
+def register():
+   form = RegistrationForm()
+   return render_template('register.html', title='Register', form=form)
+
+@app.route("/login")
+def register():
+   form = LoginForm()
+   return render_template('login.html', title='Login', form=form)
+
+
 
 @app.route("/")
 def home():
