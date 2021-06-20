@@ -27,22 +27,22 @@ db = SQLAlchemy(app)
 class Vendors(db.Model):
     __tablename__ = "Vendors"
     vendor_id = db.Column(db.Integer,primary_key=True)
-    vendor_active = db.Column(db.String(255),nullable=False)
-    vendor_type = db.Column(db.String(255),nullable=False)
-    vendor_company_name =db.Column(db.String(255),nullable=False)
-    vendor_contact_name = db.Column(db.String(255),nullable=False)
-    vendor_onmarketdate = db.Column(db.DateTime,nullable=False,default=datetime.now) #utcnow
-    vendor_email = db.Column(db.String(255),nullable=False)
-    vendor_mobile = db.Column(db.String(25),nullable=False)
-    vendor_fax = db.Column(db.String(25),nullable=False)
+    vendor_active = db.Column(db.String(255),nullable=True)
+    vendor_type = db.Column(db.String(255),nullable=True)
+    vendor_company_name =db.Column(db.String(255),nullable=True)
+    vendor_contact_name = db.Column(db.String(255),nullable=True)
+    vendor_onmarketdate = db.Column(db.DateTime,nullable=True,default=datetime.now) #utcnow
+    vendor_email = db.Column(db.String(255),nullable=True)
+    vendor_mobile = db.Column(db.String(25),nullable=True)
+    vendor_fax = db.Column(db.String(25),nullable=True)
     vendor_address_house_name = db.Column(db.String(255),nullable=True)
     vendor_address_house_number = db.Column(db.String(255),nullable=True)
-    vendor_address_line1 = db.Column(db.String(255),nullable=False)
-    vendor_address_line_2 = db.Column(db.String(255),nullable=False)
-    vendor_address_town = db.Column(db.String(255),nullable=False)
-    vendor_address_city = db.Column(db.String(255),nullable=False)
-    vendor_address_county = db.Column(db.String(255),nullable=False)
-    vendor_address_post_code = db.Column(db.String(255),nullable=False)
+    vendor_address_line1 = db.Column(db.String(255),nullable=True)
+    vendor_address_line_2 = db.Column(db.String(255),nullable=True)
+    vendor_address_town = db.Column(db.String(255),nullable=True)
+    vendor_address_city = db.Column(db.String(255),nullable=True)
+    vendor_address_county = db.Column(db.String(255),nullable=True)
+    vendor_address_post_code = db.Column(db.String(255),nullable=True)
     
 
 
@@ -86,7 +86,7 @@ def register():
    return render_template('register.html', title='Register', form=form)
 
 @app.route("/login")
-def register():
+def login():
    form = LoginForm()
    return render_template('login.html', title='Login', form=form)
 
