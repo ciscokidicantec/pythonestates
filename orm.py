@@ -2,7 +2,7 @@ import os
 import sys
 from datetime import datetime
 
-from flask import Flask,redirect,url_for,render_template,request
+from flask import Flask,redirect,url_for,render_template,request,flash
 from sqlalchemy import create_engine, engine
 from sqlalchemy.ext.declarative.api import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -80,9 +80,12 @@ class Vendors(db.Model):
         #print(f"\nVendor Contect Name {self.vendor_contact_name}")
 
 
-@app.route("/register")
+@app.route("/register", methods = ["POST","GET"])
 def register():
    form = RegistrationForm()
+   if form.validate_on_submit():
+      flash(f'Account created successfully for {form.username.data}!','success')
+      return redirect(url_for('home'))
    return render_template('register.html', title='Register', form=form)
 
 @app.route("/login")
@@ -92,11 +95,11 @@ def login():
 
 
 
-@app.route("/")
+@app.route("/", methods = ['PUT', 'GET'])
 def home():
 
 
-   return "At The Home Page"
+   return render_template('home.html')
 
 
 @app.route("/v")
