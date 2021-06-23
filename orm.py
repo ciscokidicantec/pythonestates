@@ -44,6 +44,10 @@ class Vendors(db.Model):
     vendor_address_county = db.Column(db.String(255),nullable=True)
     vendor_address_post_code = db.Column(db.String(255),nullable=True)
     vendor_address_country = db.Column(db.String(255),nullable=True)
+    vendor_address_latitude = db.Column(db.String(255),nullable=True)
+    vendor_address_longitude = db.Column(db.String(255),nullable=True)
+
+
 
     
  #   def __init__(self,vendor_id,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
@@ -125,7 +129,9 @@ def create_vendors():
                vendor_address_city = "Not Applicapble",
                vendor_address_county = "Lancashire",
                vendor_address_post_code = "FY1 6LD",
-               vendor_address_country = "England")
+               vendor_address_country = "England",
+               vendor_address_latitude = "53.34",
+               vendor_address_longitude = "-1.456")
 
    db.session.add(v1)
    v2=Vendors(vendor_active="n",
