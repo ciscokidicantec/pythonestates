@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        {% for vendor in vendors %}
+            <br />Vendor Id = {{vendor.vendor_id}}
+            <br />Vendor Type = {{vendor.vendor_type}}
+            <br />First Came On Market = {{vendor.vendor_onmarketdate}}
+            <br />Vendor Active = {{vendor.vendor_active}}
+            <br />Vendor Company Name = {{vendor.vendor_company_name}}
+            <br />Vendor Contact Name = {{vendor.vendor_contact_name}}
+            <br />Vendor Email = {{vendor.vendor_email}}
+            <br />Vendor Mobile = {{vendor.vendor_mobile}}
+            <br />Vendor Fax = {{vendor.vendor_fax}}
+            <br />Vendor House Name = {{vendor.vendor_address_house_name}}
+            <br />Vendor Address House Number  = {{vendor.vendor_address_house_number}}
+            <br />Vendor Address Line 1 = {{vendor.vendor_address_line_1}}
+            <br />Vendor Address Line 2 = {{vendor.vendor_address_line_2}}
+            <br />Vendor Address Town = {{vendor.vendor_address_town}}
+            <br />Vendor Address City = {{vendor.vendor_address_city}}
+            <br />Vendor Address County = {{vendor.vendor_address_county}}
+            <br />Vendor Address Post Code = {{vendor.vendor_address_post_code}}
+            <br />Vendor Address Country = {{vendor.vendor_address_country}}
+
+            <br />
+            <br />
+        {% endfor %}
+
+
+{% endblock content %}

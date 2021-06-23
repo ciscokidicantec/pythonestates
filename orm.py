@@ -37,28 +37,15 @@ class Vendors(db.Model):
     vendor_fax = db.Column(db.String(25),nullable=True)
     vendor_address_house_name = db.Column(db.String(255),nullable=True)
     vendor_address_house_number = db.Column(db.String(255),nullable=True)
-    vendor_address_line1 = db.Column(db.String(255),nullable=True)
+    vendor_address_line_1 = db.Column(db.String(255),nullable=True)
     vendor_address_line_2 = db.Column(db.String(255),nullable=True)
     vendor_address_town = db.Column(db.String(255),nullable=True)
     vendor_address_city = db.Column(db.String(255),nullable=True)
     vendor_address_county = db.Column(db.String(255),nullable=True)
     vendor_address_post_code = db.Column(db.String(255),nullable=True)
+    vendor_address_country = db.Column(db.String(255),nullable=True)
+
     
-
-
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
  #   def __init__(self,vendor_id,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
   #      self.vendor_id = vendor_id
    #     self.vendor_active = vendor_active
@@ -79,10 +66,13 @@ class Vendors(db.Model):
        # print(f"\nVendor_Company Name {self.vendor_company_name}")
         #print(f"\nVendor Contect Name {self.vendor_contact_name}")
 
+@app.route("/property", methods =  ["POST","GET"])
+def property():
+   return render_template("property.html", title='Property')        
+
 @app.route("/about", methods =  ["POST","GET"])
 def about():
    return render_template("about.html", title='About')        
-
 
 @app.route("/register", methods = ["POST","GET"])
 def register():
@@ -120,24 +110,53 @@ def create_vendors():
    result = engine.execute(sql)
 
    db.create_all()
-   v1=Vendors(vendor_active="y",vendor_type="e", vendor_company_name="Tiger Estates", vendor_contact_name="Sam Houston")
+   v1=Vendors(vendor_active="y",
+               vendor_type="e",
+               vendor_company_name="Tiger Estates",
+               vendor_contact_name="Sam Houston",
+               vendor_email ="tigerestates@google.co.uk",
+               vendor_mobile = "07424454567",
+               vendor_fax = "01793 3224598",
+               vendor_address_house_name = "Villa Rosa",
+               vendor_address_house_number = "433a",
+               vendor_address_line_1 = "Central Drive",
+               vendor_address_line_2 = "South Shore",
+               vendor_address_town = "Blackpool",
+               vendor_address_city = "Not Applicapble",
+               vendor_address_county = "Lancashire",
+               vendor_address_post_code = "FY1 6LD",
+               vendor_address_country = "England")
+
    db.session.add(v1)
-   v2=Vendors(vendor_active="n",vendor_type="p", vendor_company_name="", vendor_contact_name="Jade Menham")
+   v2=Vendors(vendor_active="n",
+               vendor_type="p",
+               vendor_company_name="Not Relevant",
+               vendor_contact_name="Jade Menham",
+               vendor_email ="jade@yahoo.co.uk")
    db.session.add(v2)
+   v3=Vendors(vendor_active="y",
+               vendor_type="p",
+               vendor_company_name="Not Relevant",
+               vendor_contact_name="Helen Menham",
+               vendor_email ="hellfour@googlemail.co.uk")
+   db.session.add(v3)
+   v4=Vendors(vendor_active="y",
+               vendor_type="p",
+               vendor_company_name="Not Relevant",
+               vendor_contact_name="Mario E Wakeham",
+               vendor_email ="cisco.kidicantec@googlemail.co.uk")
+   db.session.add(v4)
+
    db.session.commit()
 
-   vendor = Vendors.query.filter_by(vendor_contact_name = "Jade Menham").first()
-
+   #vendors = Vendors.query.filter_by(vendor_contact_name = "Jade Menham").first()
+   vendors = Vendors.query.filter_by()
 
   #  v1.print_vendors()
     #v2.print_vendors()
 
-   return f'The vendor type is {vendor.vendor_type} First Came On Market {vendor.vendor_onmarketdate}'
-
-
-
-
-
+   #return f'The vendor type is {vendors.vendor_type} First Came On Market {vendors.vendor_onmarketdate}'
+   return render_template('vendors.html',vendors=vendors )
 
 if __name__ == '__main__':
     #DEBUG is SET to TRUE. CHANGE FOR PROD
