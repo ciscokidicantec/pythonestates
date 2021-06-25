@@ -1,3 +1,4 @@
+from enum import unique
 import os
 import sys
 from datetime import datetime
@@ -24,6 +25,29 @@ app.config["SECRET_KEY"] = '0dc976215dbebf7ec65ed062fe111d12'
 
 db = SQLAlchemy(app)
 
+class User(db.Model):
+ #  __tablename__ = "User"
+   id = db.Column(db.Integer,primary_key=True)
+   username = db.Column(db.String(20),nullable=False,unique=True)
+   email = db.Column(db.String(20),nullable=False,unique=True)
+   image_file = db.Column(db.String(20),nullable=False,default='default.jpg')   
+   password = db.Column(db.String(60),nullable=False)
+   posts = db.relationship('Post',backref='author', lazy= True)
+
+   def __repr__(self):
+      return f"User('{self.username}','{self.email}','{self.image_file}')"
+
+class Post(db.Model):
+ #  __tablename__ = "Post"
+   id = db.Column(db.Integer,primary_key=True)
+   title = db.Column(db.String(20),nullable=False)
+   date_posted = db.Column(db.DateTime,nullable=True,default=datetime.now)
+   content = db.Column(db.Text,nullable=False)
+   user_id = db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+
+   def __repr__(self):
+      return f"Post('{self.title}','{self.date_posted}')"
+
 class Vendors(db.Model):
     __tablename__ = "Vendors"
     vendor_id = db.Column(db.Integer,primary_key=True)
@@ -46,9 +70,6 @@ class Vendors(db.Model):
     vendor_address_country = db.Column(db.String(255),nullable=True)
     vendor_address_latitude = db.Column(db.String(255),nullable=True)
     vendor_address_longitude = db.Column(db.String(255),nullable=True)
-
-
-
     
  #   def __init__(self,vendor_id,vendor_active,vendor_type,vendor_company_name,vendor_contact_name):
   #      self.vendor_id = vendor_id
@@ -101,10 +122,7 @@ def login():
 
 @app.route("/", methods = ['PUT', 'GET'])
 def home():
-
-
    return render_template('home.html')
-
 
 @app.route("/v")
 def create_vendors():
@@ -113,7 +131,31 @@ def create_vendors():
    engine = create_engine(os.getenv('DATABASE_URL'))
    result = engine.execute(sql)
 
+   #sql = 'DROP TABLE IF EXISTS post;'
+   #engine = create_engine(os.getenv('DATABASE_URL'))
+   #result = engine.execute(sql)
+
+   #sql = 'DROP TABLE IF EXISTS user;'
+   #engine = create_engine(os.getenv('DATABASE_URL'))
+   #result = engine.execute(sql)
+
    db.create_all()
+
+   u1=User(username="mario",email="mew@y.com",password="qwerty")
+   db.session.add(u1)
+   u2=User(username="helen",email="hell@y.com",password="qwerty")
+   db.session.add(u2)
+   db.session.commit()
+   
+
+   p1=Post(title="my book",content="always true")
+   db.session.add(p1)
+   p2=Post(title="helen book",content="more true")
+   db.session.add(p2)
+   db.session.commit()
+
+ 
+
    v1=Vendors(vendor_active="y",
                vendor_type="e",
                vendor_company_name="Tiger Estates",
