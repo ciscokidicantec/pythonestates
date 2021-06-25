@@ -4,10 +4,16 @@ import sys
 from datetime import datetime
 
 from flask import Flask,redirect,url_for,render_template,request,flash
+from flask_login.utils import login_user
 from sqlalchemy import create_engine, engine
 from sqlalchemy.ext.declarative.api import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_sqlalchemy import SQLAlchemy
+
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_manager
+from flask_login import UserMixin, current_user,logout_user,login_required
+
 
 from form import RegistrationForm, LoginForm
 
@@ -18,6 +24,11 @@ from form import RegistrationForm, LoginForm
 
 app=Flask(__name__)
 
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+
 
 #app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/mymariodatabase"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/property"
@@ -26,7 +37,12 @@ app.config["SECRET_KEY"] = '0dc976215dbebf7ec65ed062fe111d12'
 
 db = SQLAlchemy(app)
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+   return User.query.get(int(user_id))
+
+
+class User(db.Model,UserMixin):
  #  __tablename__ = "User"
    id = db.Column(db.Integer,primary_key=True)
    username = db.Column(db.String(20),nullable=False,unique=True)
@@ -102,23 +118,49 @@ def about():
 
 @app.route("/register", methods = ["POST","GET"])
 def register():
+   if current_user.is_authenticated:
+      return redirect(url_for('home'))
    form = RegistrationForm()
    if form.validate_on_submit():
-      flash(f'Account created successfully for {form.username.data}!','success')
-      return redirect(url_for('home'))
+      hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+      user = User(username=form.username.data, email=form.email.data,password=hashed_password)
+      db.session.add(user)
+      db.session.commit()
+      #bcrypt.check_password_hash(hashed_password,'testing')
+      flash('Your Account Is Now Created You Are Now Able To Log In','success')
+      return redirect(url_for('login'))
    return render_template('register.html', title='Register', form=form)
 
 @app.route("/login", methods = ["POST","GET"])
 def login():
+   if current_user.is_authenticated:
+      return redirect(url_for('home'))
    form = LoginForm()
    if form.validate_on_submit():
+      user=User.query.filter_by(email=form.email.data).first()
+      if user and bcrypt.check_password_hash(user.password,form.password.data):
+         login_user(user,remember=form.remember.data)
+         next_page = request.args.get('next')
+         return redirect(next_page) if next_page else redirect(url_for('home'))
+      else:
+         flash('Log in unsuccessful, please check email and password','danger')
+
       if form.email.data == 'admin@blog.com' and form.password.data == 'password':
          flash('You have been logged in sucessfully!','success')
          return redirect(url_for('home'))
       else:
-         flash('Log in unsuccessful, please check user name and password','danger')
+         flash('Log in unsuccessful, please email and password','danger')
    return render_template('login.html', title='Login', form=form)
 
+@app.route("/logout")
+def logout():
+   logout_user()
+   return redirect(url_for('home'))
+
+@app.route("/account")
+@login_required
+def account():
+   return render_template('account.html', title='Account')
 
 
 @app.route("/", methods = ['PUT', 'GET'])
