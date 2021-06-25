@@ -19,7 +19,8 @@ from form import RegistrationForm, LoginForm
 app=Flask(__name__)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/mymariodatabase"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/mymariodatabase"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Coreldraw1$@localhost/property"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = '0dc976215dbebf7ec65ed062fe111d12'
 
@@ -44,7 +45,7 @@ class Post(db.Model):
    date_posted = db.Column(db.DateTime,nullable=True,default=datetime.now)
    content = db.Column(db.Text,nullable=False)
    user_id = db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
-
+   #user_id = db.Column(db.Integer,db.ForeignKey('user.id'), nullable=True)
    def __repr__(self):
       return f"Post('{self.title}','{self.date_posted}')"
 
@@ -139,6 +140,7 @@ def create_vendors():
    #engine = create_engine(os.getenv('DATABASE_URL'))
    #result = engine.execute(sql)
 
+   db.drop_all()
    db.create_all()
 
    u1=User(username="mario",email="mew@y.com",password="qwerty")
@@ -146,15 +148,13 @@ def create_vendors():
    u2=User(username="helen",email="hell@y.com",password="qwerty")
    db.session.add(u2)
    db.session.commit()
-   
 
-   p1=Post(title="my book",content="always true")
+
+   p1=Post(title="my book",content="always true",user_id=u1.id)
    db.session.add(p1)
-   p2=Post(title="helen book",content="more true")
+   p2=Post(title="helen book",content="more true",user_id=u2.id)
    db.session.add(p2)
    db.session.commit()
-
- 
 
    v1=Vendors(vendor_active="y",
                vendor_type="e",
