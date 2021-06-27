@@ -3,6 +3,7 @@ import os
 import sys
 from datetime import datetime
 
+import secrets
 from flask import Flask,redirect,url_for,render_template,request,flash
 from flask_login.utils import login_user
 from sqlalchemy import create_engine, engine
@@ -15,6 +16,7 @@ from flask_login import LoginManager, login_manager
 from flask_login import UserMixin, current_user,logout_user,login_required
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,ValidationError
 #from orm import User
@@ -69,12 +71,35 @@ class RegistrationForm(FlaskForm):
          raise ValidationError('That Email Is Taken , Please Choose A Different One.')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',
+   email = StringField('Email',
                 validators=[DataRequired(), Email()])       
-    password = PasswordField('Password',
+   password = PasswordField('Password',
                 validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+   remember = BooleanField('Remember Me')
+   submit = SubmitField('Login')
+
+class UpdateAccountForm(FlaskForm):
+   username = StringField('Username',
+                validators=[DataRequired(),
+                Length(min=2, max=50)])
+   email = StringField('Email',
+                validators=[DataRequired(), Email()])
+   picture = FileField('Update Profile Picture',
+                validators=[FileAllowed(['jpg','png'])])                       
+   submit = SubmitField('Update')
+
+   def validate_username(self,username):
+      if username.data != current_user.username:
+         user = User.query.filter_by(username=username.data).first()
+         if user:
+            raise ValidationError('That User Is Taken , Please Choose A Different One.')
+
+   def validate_email(self,email):
+      if email.data != current_user.email:
+         user = User.query.filter_by(email=email.data).first()
+         if user:
+            raise ValidationError('That Email Is Taken , Please Choose A Different One.')
+
 
 class User(db.Model,UserMixin):
  #  __tablename__ = "User"
@@ -191,11 +216,31 @@ def logout():
    logout_user()
    return redirect(url_for('home'))
 
-@app.route("/account")
+def save_picture(form_picture):
+   random_hex = secrets.token_hex(8)
+   _, f_ext = os.path.splitext(form_picture.filename)
+   picture_fn = random_hex + f_ext
+   picture_path = os.path.join(app.root_path,'static/uploadimages',picture_fn)
+   form_picture.save(picture_path)
+   return picture_fn
+
+@app.route("/account", methods = ['POST', 'GET'])
 @login_required
 def account():
+   form = UpdateAccountForm()
+   if form.validate_on_submit():
+      if form.picture.data:
+         picture_file = save_picture(form.picture.data)
+         current_user.image_file = picture_file
+      current_user.email = form.email.data
+      db.session.commit()
+      flash('Your Account Has Been Update','success')
+      return redirect(url_for('account'))
+   elif request.method == 'GET':
+      form.username.data = current_user.username
+      form.email.data = current_user.email
    image_file = url_for('static',filename='uploadimages/' + current_user.image_file)
-   return render_template('account.html', title='Account',image_file=image_file)
+   return render_template('account.html', title='Account',image_file=image_file, form=form)
 
 
 @app.route("/", methods = ['PUT', 'GET'])
