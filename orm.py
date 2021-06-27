@@ -14,6 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_manager
 from flask_login import UserMixin, current_user,logout_user,login_required
+from PIL import Image
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
@@ -221,7 +222,10 @@ def save_picture(form_picture):
    _, f_ext = os.path.splitext(form_picture.filename)
    picture_fn = random_hex + f_ext
    picture_path = os.path.join(app.root_path,'static/uploadimages',picture_fn)
-   form_picture.save(picture_path)
+   output_size = (125,125)
+   i = Image.open(form_picture)
+   i.thumbnail(output_size)
+   i.save(picture_path)
    return picture_fn
 
 @app.route("/account", methods = ['POST', 'GET'])
