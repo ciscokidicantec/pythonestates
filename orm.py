@@ -47,7 +47,7 @@ class User(db.Model,UserMixin):
    id = db.Column(db.Integer,primary_key=True)
    username = db.Column(db.String(20),nullable=False,unique=True)
    email = db.Column(db.String(20),nullable=False,unique=True)
-   image_file = db.Column(db.String(20),nullable=False,default='default.jpg')   
+   image_file = db.Column(db.String(255),nullable=False,default='default.jpg')   
    password = db.Column(db.String(60),nullable=False)
    posts = db.relationship('Post',backref='author', lazy= True)
 
@@ -160,7 +160,8 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
-   return render_template('account.html', title='Account')
+   image_file = url_for('static',filename='uploadimages/' + current_user.image_file)
+   return render_template('account.html', title='Account',image_file=image_file)
 
 
 @app.route("/", methods = ['PUT', 'GET'])
