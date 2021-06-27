@@ -19,7 +19,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,ValidationError
 #from orm import User
 
-#from form import RegistrationForm, LoginForm
+#from form import RegistrationForm, LoginForm # not necessary
 #from form import LoginForm
 
 #from sqlalchemy import Column,ForeignKey,Integer,String
