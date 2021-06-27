@@ -14,8 +14,13 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_manager
 from flask_login import UserMixin, current_user,logout_user,login_required
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, EqualTo,ValidationError
+#from orm import User
 
-from form import RegistrationForm, LoginForm
+#from form import RegistrationForm, LoginForm
+#from form import LoginForm
 
 #from sqlalchemy import Column,ForeignKey,Integer,String
 #from sqlalchemy.ext.declarative import declarative_base
@@ -41,6 +46,35 @@ db = SQLAlchemy(app)
 def load_user(user_id):
    return User.query.get(int(user_id))
 
+class RegistrationForm(FlaskForm):
+   username = StringField('Username',
+                validators=[DataRequired(),
+                Length(min=2, max=50)])
+   email = StringField('Email',
+                validators=[DataRequired(), Email()])       
+   password = PasswordField('Password',
+                validators=[DataRequired()])
+   confirm_password = PasswordField('Confirm Password',
+                validators=[DataRequired(),EqualTo('password')])
+   submit = SubmitField('Sign Up')
+
+   def validate_username(self,username):
+      user = User.query.filter_by(username=username.data).first()
+      if user:
+         raise ValidationError('That User Is Taken , Please Choose A Different One.')
+
+   def validate_email(self,email):
+      user = User.query.filter_by(email=email.data).first()
+      if user:
+         raise ValidationError('That Email Is Taken , Please Choose A Different One.')
+
+class LoginForm(FlaskForm):
+    email = StringField('Email',
+                validators=[DataRequired(), Email()])       
+    password = PasswordField('Password',
+                validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
 class User(db.Model,UserMixin):
  #  __tablename__ = "User"
