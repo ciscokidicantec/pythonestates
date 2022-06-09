@@ -18,7 +18,7 @@ from PIL import Image
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo,ValidationError
 #from orm import User
 
@@ -48,6 +48,12 @@ db = SQLAlchemy(app)
 @login_manager.user_loader
 def load_user(user_id):
    return User.query.get(int(user_id))
+
+
+class PostForm(FlaskForm):
+   title=StringField('Title',validators=[DataRequired()])
+   content=TextAreaField('Content',validators=[DataRequired()])
+   submit=SubmitField('Post')   
 
 class RegistrationForm(FlaskForm):
    username = StringField('Username',
@@ -250,6 +256,16 @@ def account():
 @app.route("/", methods = ['PUT', 'GET'])
 def home():
    return render_template('home.html')
+
+@app.route("/post/new", methods =  ["POST","GET"])
+@login_required
+def new_post():
+   form=PostForm()
+   if form.validate_on_submit():
+      flash('Your Post Has Been Created!','success')
+      return redirect(url_for('home'))
+   return render_template("create_post.html", title='New Post',form=form)        
+
 
 @app.route("/v")
 def create_vendors():

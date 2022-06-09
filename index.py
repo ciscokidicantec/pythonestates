@@ -394,6 +394,15 @@ Situated over a huge square footage, this home offers huge potential throughout,
 
 #=========================================================================================================================
 
+@app.route('/about',methods=['GET','POST'])
+def about():
+    return
+
+@app.route('/property',methods=['GET','POST'])
+def property():
+    return
+
+
 @app.route('/j',methods=['GET','POST'])
 def s():
 
